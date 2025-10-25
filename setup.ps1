@@ -276,7 +276,7 @@ foreach ($check in $checks.GetEnumerator()) {
 
 # Resumo Final
 Write-Host "`n╔════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║                    RESUMO                         ║" -ForegroundColor Cyan
+Write-Host "║                    RESUMO                          ║" -ForegroundColor Cyan
 Write-Host "╚════════════════════════════════════════════════════╝" -ForegroundColor Cyan
 
 if ($allOk) {
