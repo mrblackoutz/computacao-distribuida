@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package file_processor;
+
+// Mensagem para envio de chunks de arquivo
+message FileChunk {
+  bytes content = 1;
+}
+
+// Mensagem para requisição inicial do streaming
+message FileMetadata {
+  string file_name = 1;
+  int64 file_size = 2;
+}
+
+// Requisição para CompressPDF
+message CompressPDFRequest {
+  FileMetadata metadata = 1;
+}
+
+message CompressPDFResponse {
+  bool success = 1;
+  string status_message = 2;
+  string output_file_name = 3;
+}
+
+// Requisição para ConvertToTXT
+message ConvertToTXTRequest {
+  FileMetadata metadata = 1;
+}
+
+message ConvertToTXTResponse {
+  bool success = 1;
+  string status_message = 2;
+  string output_file_name = 3;
+}
+
+// Requisição para ConvertImageFormat
+message ConvertImageFormatRequest {
+  FileMetadata metadata = 1;
+  string output_format = 2;  // ex: "png", "jpg", "gif"
+}
+
+message ConvertImageFormatResponse {
+  bool success = 1;
+  string status_message = 2;
+  string output_file_name = 3;
+}
+
+// Requisição para ResizeImage
+message ResizeImageRequest {
+  FileMetadata metadata = 1;
+  int32 width = 2;
+  int32 height = 3;
+  bool maintain_aspect_ratio = 4;
+}
+
+message ResizeImageResponse {
+  bool success = 1;
+  string status_message = 2;
+  string output_file_name = 3;
+}
+
+// Definição do serviço
+service FileProcessorService {
+  // Compressão de PDF
+  // Cliente envia stream de chunks, servidor responde com stream de saída
+  rpc CompressPDF(stream FileChunk) returns (stream FileChunk);
+  
+  // Conversão de PDF para TXT
+  rpc ConvertToTXT(stream FileChunk) returns (stream FileChunk);
+  
+  // Conversão de formato de imagem
+  rpc ConvertImageFormat(stream FileChunk) returns (stream FileChunk);
+  
+  // Redimensionamento de imagem
+  rpc ResizeImage(stream FileChunk) returns (stream FileChunk);
+}

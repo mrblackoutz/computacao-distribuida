@@ -53,3 +53,91 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# Generated protobuf files
+*.pb.h
+*.pb.cc
+*_pb2.py
+*_pb2_grpc.py
+server_cpp/generated/
+client_cpp/generated/
+client_python/generated/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/*.log
+
+# Test results
+tests/test_results/*
+!tests/test_results/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*.swp
+*.swo
+*~
+.directory
+.bash_history
+.bashrc.bak
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# vcpkg
+vcpkg_installed/
+
+# Scripts execution permissions tracking
+# (permissions são gerenciadas via chmod, não no git)
+
+# Test files (generated)
+tests/test_files/*.pdf
+tests/test_files/*.jpg
+tests/test_files/*.png
+tests/test_files/*.ps
+!tests/test_files/README.md

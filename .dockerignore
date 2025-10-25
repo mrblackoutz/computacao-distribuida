@@ -1,0 +1,48 @@
+# Diretórios de build
+**/build/
+**/cmake-build-*/
+**/.vs/
+**/.vscode/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/venv/
+**/.venv/
+**/.pytest_cache/
+**/*.egg-info/
+
+# Arquivos temporários
+**/temp/
+**/tmp/
+**/.cache/
+
+# Arquivos gerados
+**/generated/
+**/*.pb.h
+**/*.pb.cc
+**/*_pb2.py
+**/*_pb2_grpc.py
+
+# Logs
+**/logs/
+**/*.log
+
+# Git
+.git/
+.gitignore
+
+# IDE
+**/.idea/
+**/*.swp
+**/*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testes
+tests/test_results/

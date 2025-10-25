@@ -1,0 +1,17 @@
+Sample PDF Test File
+===================
+
+This is a test PDF document for the File Processor gRPC Service.
+
+Features to test:
+- PDF Compression
+- PDF to Text Conversion
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+
+Multiple paragraphs are included to ensure the PDF has sufficient content
+for meaningful compression and text extraction testing.
+
+End of test document.

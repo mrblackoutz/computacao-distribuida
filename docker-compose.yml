@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Servidor gRPC
+  server:
+    build:
+      context: .
+      dockerfile: server_cpp/Dockerfile
+    container_name: file-processor-server
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./logs:/app/logs
+      - server-tmp:/tmp
+    networks:
+      - file-processor-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  # Cliente C++
+  client-cpp:
+    build:
+      context: .
+      dockerfile: client_cpp/Dockerfile
+    container_name: file-processor-client-cpp
+    volumes:
+      - ./tests/test_files:/app/input:ro
+      - ./tests/test_results:/app/output
+    networks:
+      - file-processor-network
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
+    profiles:
+      - client
+
+  # Cliente Python
+  client-python:
+    build:
+      context: .
+      dockerfile: client_python/Dockerfile
+    container_name: file-processor-client-python
+    volumes:
+      - ./tests/test_files:/app/input:ro
+      - ./tests/test_results:/app/output
+    networks:
+      - file-processor-network
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
+    profiles:
+      - client
+
+volumes:
+  server-tmp:
+    driver: local
+
+networks:
+  file-processor-network:
+    driver: bridge
