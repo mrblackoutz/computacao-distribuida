@@ -21,7 +21,15 @@ void signalHandler(int signal) {
 
 void RunServer(const std::string& server_address) {
     Logger& logger = Logger::getInstance();
-    logger.setLogFile("../logs/server.log");
+    
+    // Criar diretório de logs se não existir
+    #ifdef _WIN32
+        system("if not exist logs mkdir logs");
+        logger.setLogFile("logs/server.log");
+    #else
+        system("mkdir -p logs");
+        logger.setLogFile("logs/server.log");
+    #endif
     
     FileProcessorServiceImpl service;
     
@@ -46,7 +54,7 @@ void RunServer(const std::string& server_address) {
     
     std::cout << "\n";
     std::cout << "╔════════════════════════════════════════════╗\n";
-    std::cout << "║   File Processor gRPC Server Started      ║\n";
+    std::cout << "║   File Processor gRPC Server Started       ║\n";
     std::cout << "╠════════════════════════════════════════════╣\n";
     std::cout << "║  Address: " << server_address;
     // Padding to align

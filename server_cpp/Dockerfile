@@ -89,8 +89,11 @@ RUN ldconfig
 # Copiar executável
 COPY --from=builder /app/build/file_processor_server /usr/local/bin/
 
-# Criar diretórios
-RUN mkdir -p /app/logs /tmp
+# Criar diretórios com permissões corretas
+RUN mkdir -p /app/logs /tmp && \
+    chmod 777 /app/logs && \
+    touch /app/logs/server.log && \
+    chmod 666 /app/logs/server.log
 
 WORKDIR /app
 
