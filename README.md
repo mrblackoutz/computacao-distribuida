@@ -981,7 +981,70 @@ sudo nano /etc/ImageMagick-6/policy.xml
 
 ## 11. Relatório Técnico
 
-### 11.1 Decisões de Design
+### 11.1 Tratamento de Erros
+
+Este projeto implementa **tratamento robusto e completo de erros** conforme requisitos do professor.
+
+**📄 Análise Detalhada**: [ANALISE_TRATAMENTO_ERROS.md](docs/ANALISE_TRATAMENTO_ERROS.md)
+
+**Resumo da Conformidade**:
+
+✅ **Servidor C++**:
+- Todos os erros tratados com status gRPC apropriados
+- Mensagens descritivas incluindo código de erro e output do comando
+- Cleanup automático de arquivos temporários (mesmo em erro)
+- Logs completos de todas as operações (INFO, SUCCESS, ERROR)
+
+✅ **Clientes (C++ e Python)**:
+- Validação de entrada antes de enviar ao servidor
+- Captura específica de `grpc.RpcError`
+- Mensagens claras e coloridas para o usuário
+- Tratamento de exceções genéricas
+
+✅ **Testes**:
+- Teste específico de erro (`test_05_error_handling_invalid_file`)
+- Validação de comportamento em cenários de falha
+
+**Exemplo de Tratamento**:
+```cpp
+// Servidor - Padrão consistente em todos os serviços
+if (result.exit_code != 0) {
+    std::string error = "Ghostscript failed with code " + 
+                       std::to_string(result.exit_code) + 
+                       ": " + result.output;
+    logger_.log(LogLevel::ERROR_LEVEL, service_name, input_file, error);
+    
+    FileProcessorUtils::cleanupFile(input_file);
+    FileProcessorUtils::cleanupFile(output_file);
+    
+    return grpc::Status(grpc::StatusCode::INTERNAL, error);
+}
+```
+
+```python
+# Cliente Python
+try:
+    response_iterator = rpc_method(self._send_file(input_path))
+    total_received = self._receive_file(response_iterator, output_path)
+    return True
+except grpc.RpcError as e:
+    print(f"❌ RPC error: {e.code()}: {e.details()}")
+    return False
+except Exception as e:
+    print(f"❌ Error: {str(e)}")
+    return False
+```
+
+**Categorias de Erros Tratadas**:
+| Categoria | Exemplos | Status |
+|-----------|----------|--------|
+| **I/O de Arquivos** | Criar temp file, escrever, ler | ✅ |
+| **Comandos Externos** | gs, pdftotext, convert | ✅ |
+| **Comunicação gRPC** | Falha stream, timeout | ✅ |
+| **Validação** | Arquivo não existe, formato inválido | ✅ |
+| **Recursos** | Cleanup de arquivos temp | ✅ |
+
+### 11.2 Decisões de Design
 
 #### Chunk Size (64KB)
 **Justificativa**:
