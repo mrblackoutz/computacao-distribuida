@@ -20,9 +20,9 @@
 - [9. Docker](#9-docker)
 - [10. Troubleshooting](#10-troubleshooting)
 - [11. Relatório Técnico](#11-relatório-técnico)
-- [12. Guia de Avaliação](#12-guia-de-avaliação)
-- [13. FAQ](#13-faq)
-- [14. Status do Projeto](#14-status-do-projeto)
+- [12. FAQ](#12-faq)
+- [13. Status do Projeto](#13-status-do-projeto)
+- [COMPONENTES DO GRUPO](#componentes-do-grupo)
 
 ---
 
@@ -310,7 +310,7 @@ sudo usermod -aG docker $USER
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│                    Camada Cliente                     │
+│                    Camada Cliente                    │
 │  ┌────────────────┐          ┌────────────────┐      │
 │  │  Cliente C++   │          │ Cliente Python │      │
 │  └────────┬───────┘          └────────┬───────┘      │
@@ -326,18 +326,18 @@ sudo usermod -aG docker $USER
 │                       │                               │
 │         ┌─────────────┼─────────────┐                 │
 │         │             │             │                 │
-│    ┌────▼────┐   ┌───▼────┐   ┌───▼────┐            │
-│    │Compress │   │Convert │   │ Image  │            │
-│    │  PDF    │   │ to TXT │   │Process │            │
-│    └────┬────┘   └───┬────┘   └───┬────┘            │
-│         │            │            │                  │
-└─────────┼────────────┼────────────┼──────────────────┘
+│    ┌────▼────┐   ┌───▼────┐   ┌───▼────┐              │
+│    │Compress │   │Convert │   │ Image  │              │
+│    │  PDF    │   │ to TXT │   │Process │              │
+│    └────┬────┘   └───┬────┘   └───┬────┘              │
+│         │            │            │                   │
+└─────────┼────────────┼────────────┼───────────────────┘
           │            │            │
 ┌─────────┼────────────┼────────────┼──────────────────┐
 │         │            │            │    Camada Tools  │
-│    ┌────▼──────┐ ┌──▼──────┐ ┌───▼─────────┐        │
-│    │Ghostscript│ │pdftotext│ │ImageMagick  │        │
-│    └───────────┘ └─────────┘ └─────────────┘        │
+│    ┌────▼──────┐ ┌──▼──────┐ ┌───▼─────────┐         │
+│    │Ghostscript│ │pdftotext│ │ImageMagick  │         │
+│    └───────────┘ └─────────┘ └─────────────┘         │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -437,11 +437,11 @@ file-processor-grpc/
 #### Menu Interativo
 ```
 ╔════════════════════════════════════════╗
-║   File Processor gRPC Client          ║
+║   File Processor gRPC Client           ║
 ╠════════════════════════════════════════╣
 ║  1. 📄 Compress PDF                    ║
 ║  2. 📝 Convert PDF to TXT              ║
-║  3. 🖼️  Convert Image Format            ║
+║  3. 🖼️  Convert Image Format           ║
 ║  4. 📏 Resize Image                    ║
 ║  5. 🚪 Exit                            ║
 ╚════════════════════════════════════════╝
@@ -983,9 +983,7 @@ sudo nano /etc/ImageMagick-6/policy.xml
 
 ### 11.1 Tratamento de Erros
 
-Este projeto implementa **tratamento robusto e completo de erros** conforme requisitos do professor.
-
-**📄 Análise Detalhada**: [ANALISE_TRATAMENTO_ERROS.md](docs/ANALISE_TRATAMENTO_ERROS.md)
+Este projeto implementa **tratamento robusto e completo de erros** conforme requisitos.
 
 **Resumo da Conformidade**:
 
@@ -1102,137 +1100,25 @@ except Exception as e:
 
 ---
 
-## 12. Guia de Avaliação
+## 12. FAQ
 
-### 12.1 Para Professores
-
-Este projeto implementa um **serviço gRPC de processamento de arquivos** com arquitetura cliente-servidor distribuída.
-
-### 12.2 Como Testar
-
-#### Opção 1: Automatizada (Recomendada)
-```powershell
-# Windows
-.\setup.ps1
-.\scripts\run_server.ps1          # Terminal 1
-.\scripts\run_client_python.ps1   # Terminal 2
-.\scripts\run_tests.ps1            # Terminal 3
-```
-
-```bash
-# Linux
-./setup.sh
-./scripts/run_server.sh           # Terminal 1
-./scripts/run_client_python.sh    # Terminal 2
-./scripts/run_tests.sh             # Terminal 3
-```
-
-#### Opção 2: Docker (Mais Simples)
-```bash
-docker-compose up -d server
-docker-compose logs -f server
-docker-compose --profile client up client-python
-```
-
-### 12.3 Pontos de Avaliação
-
-#### 1. Arquitetura e Design (25%)
-- ✅ Definição clara de serviços com Protocol Buffers
-- ✅ Streaming bidirecional implementado
-- ✅ Separação cliente-servidor bem definida
-
-**Evidências**: `proto/file_processor.proto`
-
-#### 2. Implementação do Servidor (25%)
-- ✅ Servidor gRPC funcional em C++
-- ✅ 4 serviços totalmente implementados
-- ✅ Integração com ferramentas externas
-- ✅ Sistema de logging robusto
-- ✅ Tratamento de erros completo
-
-**Evidências**: `server_cpp/src/`
-
-#### 3. Implementação dos Clientes (20%)
-- ✅ Cliente C++ com interface interativa
-- ✅ Cliente Python com interface interativa
-- ✅ Streaming bidirecional nos dois clientes
-- ✅ Tratamento de erros em ambos
-
-**Evidências**: `client_cpp/src/client.cc`, `client_python/client.py`
-
-#### 4. Containerização (15%)
-- ✅ Dockerfile para servidor (multi-stage)
-- ✅ Dockerfile para clientes
-- ✅ Docker Compose configurado
-- ✅ Otimização de imagens
-
-**Evidências**: Dockerfiles e `docker-compose.yml`
-
-#### 5. Testes (10%)
-- ✅ Suite de testes automatizados
-- ✅ 6 testes implementados
-- ✅ Validação de conectividade
-- ✅ Testes de cada serviço
-
-**Evidências**: `tests/test_suite.py`
-
-#### 6. Documentação (5%)
-- ✅ README.md completo
-- ✅ Documentação técnica detalhada
-- ✅ Comentários inline no código
-
-**Evidências**: Este arquivo
-
-### 12.4 Checklist de Verificação
-
-**Funcionalidades Básicas**:
-- [ ] Servidor inicia sem erros
-- [ ] Clientes conectam ao servidor
-- [ ] Compressão de PDF funciona
-- [ ] Conversão para TXT funciona
-- [ ] Conversão de formato funciona
-- [ ] Redimensionamento funciona
-
-**Características Avançadas**:
-- [ ] Logs aparecem no console com cores
-- [ ] Logs são salvos em arquivo
-- [ ] Arquivos temporários são limpos
-- [ ] Erros são tratados adequadamente
-- [ ] Streaming funciona para arquivos grandes
-- [ ] Múltiplos clientes podem conectar simultaneamente
-
-**Docker**:
-- [ ] Imagens Docker buildaram com sucesso
-- [ ] Servidor roda em container
-- [ ] Cliente roda em container
-- [ ] Docker Compose funciona
-
-**Testes**:
-- [ ] Testes passam com sucesso
-- [ ] Relatório de testes é gerado
-- [ ] Cobertura adequada de casos
-
----
-
-## 13. FAQ
-
-### 13.1 Como executo o projeto no Linux?
+### 12.1 Como executo o projeto no Linux?
 ```bash
 chmod +x setup.sh scripts/*.sh
 ./setup.sh
 ./scripts/run_server.sh
 ```
 
-### 13.2 Posso continuar usando PowerShell no Windows?
+### 12.2 Posso continuar usando PowerShell no Windows?
 Sim! Use os scripts `.ps1` normalmente. Os scripts `.sh` são para Linux/macOS.
 
-### 13.3 Preciso instalar algo extra no Linux?
+### 12.3 Preciso instalar algo extra no Linux?
 Sim, veja seção 3.2 para lista completa de dependências por distribuição.
 
-### 13.4 Docker funciona em ambas plataformas?
+### 12.4 Docker funciona em ambas plataformas?
 Sim! Docker funciona identicamente em Windows e Linux. Mesmos comandos, mesmo resultado.
 
-### 13.5 Como recompilo apenas o servidor?
+### 12.5 Como recompilo apenas o servidor?
 ```bash
 # Linux
 ./scripts/build.sh --server
@@ -1241,7 +1127,7 @@ Sim! Docker funciona identicamente em Windows e Linux. Mesmos comandos, mesmo re
 .\scripts\build.ps1 -Server
 ```
 
-### 13.6 Como uso porta diferente da 50051?
+### 12.6 Como uso porta diferente da 50051?
 ```bash
 # Servidor
 ./scripts/run_server.sh --address 0.0.0.0:50052  # Linux
@@ -1252,7 +1138,7 @@ Sim! Docker funciona identicamente em Windows e Linux. Mesmos comandos, mesmo re
 .\scripts\run_client_python.ps1 -ServerAddress "localhost:50052"  # Windows
 ```
 
-### 13.7 "Porta 50051 já está em uso", o que fazer?
+### 12.7 "Porta 50051 já está em uso", o que fazer?
 **Linux**:
 ```bash
 lsof -i :50051
@@ -1265,16 +1151,16 @@ netstat -ano | findstr :50051
 taskkill /F /PID <PID>
 ```
 
-Ou use porta diferente (veja 13.6).
+Ou use porta diferente (veja 12.6).
 
-### 13.8 Como adiciono um novo serviço?
+### 12.8 Como adiciono um novo serviço?
 1. Edite `proto/file_processor.proto`
 2. Regenere código: `./scripts/generate_proto.sh` ou `.\scripts\generate_proto.ps1`
 3. Implemente no servidor: `server_cpp/src/file_processor_service_impl.cc`
 4. Implemente nos clientes: `client_cpp/src/client.cc` e `client_python/client.py`
 5. Adicione testes: `tests/test_suite.py`
 
-### 13.9 Como executo apenas os testes?
+### 12.9 Como executo apenas os testes?
 ```bash
 # Com servidor rodando em outro terminal
 
@@ -1285,15 +1171,15 @@ Ou use porta diferente (veja 13.6).
 .\scripts\run_tests.ps1
 ```
 
-### 13.10 Onde estão os logs do servidor?
+### 12.10 Onde estão os logs do servidor?
 - **Console**: Output colorido em tempo real
 - **Arquivo**: `logs/server.log`
 
 ---
 
-## 14. Status do Projeto
+## 13. Status do Projeto
 
-### 14.1 Implementação
+### 13.1 Implementação
 
 | Componente | Status |
 |------------|--------|
@@ -1307,7 +1193,7 @@ Ou use porta diferente (veja 13.6).
 | Scripts Windows | ✅ 100% |
 | Scripts Linux | ✅ 100% |
 
-### 14.2 Serviços
+### 13.2 Serviços
 
 | Serviço | Tecnologia | Status |
 |---------|-----------|--------|
@@ -1316,7 +1202,7 @@ Ou use porta diferente (veja 13.6).
 | ConvertImageFormat | ImageMagick | ✅ |
 | ResizeImage | ImageMagick | ✅ |
 
-### 14.3 Métricas
+### 13.3 Métricas
 
 ```
 📊 Estatísticas do Projeto
@@ -1340,7 +1226,7 @@ Total:
   • Horas estimadas: 80+
 ```
 
-### 14.4 Compatibilidade
+### 13.4 Compatibilidade
 
 | Plataforma | Suporte |
 |------------|---------|
@@ -1352,34 +1238,19 @@ Total:
 | macOS 12+ | ✅ Completo |
 | Docker | ✅ Completo |
 
-### 14.5 Conclusão
-
-✅ **Projeto 100% completo e funcional**
-
-Implementações:
-- ✅ Servidor gRPC em C++
-- ✅ Clientes em C++ e Python
-- ✅ 4 serviços de processamento
-- ✅ Streaming bidirecional
-- ✅ Sistema de logging robusto
-- ✅ 16 scripts de automação (8 PowerShell + 8 Bash)
-- ✅ Containerização completa
-- ✅ Suite de testes automatizados
-- ✅ Documentação profissional consolidada
-
-**Status**: ✅ PRONTO PARA PRODUÇÃO E AVALIAÇÃO
-
 ---
 
-## 📞 Contato e Suporte
+## COMPONENTES DO GRUPO
 
 **Disciplina**: Computação Distribuída  
-**Instituição**: [Sua Universidade]  
+**Instituição**: Universidade Presbiteriana Mackenzie
 **Ano**: 2025
 
-**Professores**:
-- Alcides Teixeira Barboza Júnior
-- Mário O. Menezes
+| Nome | RA |
+| --- | --- |
+| Gustavo Nascimento Siqueira | 10419057 |
+| Felipe Ujvari Gasparino de Sousa | 10418415 |
+| Thomaz de Souza Scopel | 10417183 |
 
 ---
 
@@ -1403,5 +1274,4 @@ Este projeto foi desenvolvido para fins educacionais na disciplina de Computaç�
 **🎉 Projeto File Processor gRPC - Completo e Cross-Platform! 🚀**
 
 *Última atualização: Outubro 2025*  
-*Versão: 1.0*  
-*Status: ✅ Produção*
+*Versão: 1.0* 
