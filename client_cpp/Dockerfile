@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     build-essential cmake git pkg-config \
     libssl-dev libz-dev libre2-dev \
-    libcares-dev libabsl-dev && \
+    libc-ares-dev libabsl-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Instalar gRPC
@@ -34,7 +34,7 @@ RUN mkdir -p generated && \
 FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \
-    libssl3 libz3-4 libre2-9 libcares2 libprotobuf23 && \
+    libssl3 libz3-4 libre2-9 libc-ares2 libprotobuf23 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /usr/local/lib /usr/local/lib
